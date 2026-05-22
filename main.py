@@ -2,31 +2,27 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import pandas as pd
 import joblib
+import os
 
 app = Flask(__name__)
-
 CORS(app)
 
-# Load trained model
-model = joblib.load('employee_attrition.pkl')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), 'employee_attrition.pkl')
+model = joblib.load(MODEL_PATH)
 
 
 @app.route('/')
 def home():
-
     return render_template('index.html')
 
 
 @app.route('/predict', methods=['POST'])
 def predict():
-
     try:
-
         data = request.get_json()
 
         input_data = {
 
-            # Numerical Inputs
             'Age': int(data['Age']),
             'MonthlyIncome': int(data['MonthlyIncome']),
             'DistanceFromHome': int(data['DistanceFromHome']),
@@ -85,27 +81,18 @@ def predict():
 
         # Business Travel
         if data['BusinessTravel'] == 'Travel_Frequently':
-
-            input_data[
-                'BusinessTravel_Travel_Frequently'
-            ] = 1
+            input_data['BusinessTravel_Travel_Frequently'] = 1
 
         elif data['BusinessTravel'] == 'Travel_Rarely':
-
-            input_data[
-                'BusinessTravel_Travel_Rarely'
-            ] = 1
+            input_data['BusinessTravel_Travel_Rarely'] = 1
 
         # Overtime
         if data['OverTime'] == 'Yes':
-
             input_data['OverTime_Yes'] = 1
 
         # Job Role
         role_column = f"JobRole_{data['JobRole']}"
-
         if role_column in input_data:
-
             input_data[role_column] = 1
 
         # Convert to DataFrame
@@ -159,21 +146,12 @@ def predict():
             'OverTime_Yes'
         ]
 
-        input_df = input_df.reindex(
-            columns=model_columns,
-            fill_value=0
-        )
+        input_df = input_df.reindex(columns=model_columns, fill_value=0)
 
         # Predict
-        prediction_proba = model.predict_proba(
-            input_df
-        )[:, 1][0]
+        prediction_proba = model.predict_proba(input_df)[:, 1][0]
 
-        prediction_label = (
-            "Will Leave"
-            if prediction_proba > 0.5
-            else "Will Stay"
-        )
+        prediction_label = "Will Leave" if prediction_proba > 0.5 else "Will Stay"
 
         return jsonify({
             'prediction': prediction_label,
@@ -181,12 +159,10 @@ def predict():
         })
 
     except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
-        return jsonify({
-            'error': str(e)
-        }), 400
 
 
 if __name__ == '__main__':
-
-    app.run(debug=True, port=2725)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
