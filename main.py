@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load trained model
-model = joblib.load('employee_attrition.mmk')
+model = joblib.load('employee_attrition.pkl')
 
 
 @app.route('/')
