@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>AttriSense</title>
+
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <div class="header">
+    <h1>AttriSense: Employee Attrition Prediction Dashboard</h1>
+    <p>HR Analytics System</p>
+  </div>
+
+  <form id="attritionForm">
+
+    <div class="grid">
+
+      <div class="card">
+
+        <h3>Personal Information</h3>
+
+        <label>Age</label>
+        <input type="number" name="Age" required>
+
+        <label>Job Role</label>
+        <select name="JobRole">
+
+          <option value="Sales Executive">
+            Sales Executive
+          </option>
+
+          <option value="Research Scientist">
+            Research Scientist
+          </option>
+
+          <option value="Manager">
+            Manager
+          </option>
+
+        </select>
+
+        <label>Business Travel</label>
+
+        <select name="BusinessTravel">
+
+          <option value="Travel_Rarely">
+            Rarely
+          </option>
+
+          <option value="Travel_Frequently">
+            Frequently
+          </option>
+
+          <option value="Non-Travel">
+            Non-Travel
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Compensation</h3>
+
+        <label>Monthly Income</label>
+        <input type="number"
+               name="MonthlyIncome"
+               required>
+
+        <label>Stock Option Level</label>
+
+        <select name="StockOptionLevel">
+
+          <option value="0">0 - None</option>
+          <option value="1">1 - Low</option>
+          <option value="2">2 - Medium</option>
+          <option value="3">3 - High</option>
+
+        </select>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Work Conditions</h3>
+
+        <label>OverTime</label>
+
+        <select name="OverTime">
+
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+
+        </select>
+
+        <label>Work Life Balance</label>
+
+        <select name="WorkLifeBalance">
+
+          <option value="1">1 - Poor</option>
+          <option value="2">2 - Fair</option>
+          <option value="3">3 - Good</option>
+          <option value="4">4 - Excellent</option>
+
+        </select>
+
+        <label>Years at Company</label>
+
+        <input type="number"
+               name="YearsAtCompany">
+
+        <label>Num Companies Worked</label>
+
+        <input type="number"
+               name="NumCompaniesWorked">
+
+      </div>
+
+      <div class="card">
+
+        <h3>Satisfaction Scores</h3>
+
+        <label>Job Satisfaction</label>
+
+        <select name="JobSatisfaction">
+
+          <option value="1">1 - Low</option>
+          <option value="2">2 - Medium</option>
+          <option value="3">3 - High</option>
+          <option value="4">4 - Very High</option>
+
+        </select>
+
+        <label>Environment Satisfaction</label>
+
+        <select name="EnvironmentSatisfaction">
+
+          <option value="1">1 - Poor</option>
+          <option value="2">2 - Fair</option>
+          <option value="3">3 - Good</option>
+          <option value="4">4 - Excellent</option>
+
+        </select>
+
+        <label>Distance From Home</label>
+
+        <input type="range"
+               min="1"
+               max="100"
+               value="10"
+               name="DistanceFromHome"
+               oninput="distanceValue.innerText = this.value + ' km'">
+
+        <div class="slider-value"
+             id="distanceValue">
+
+          10 km
+
+        </div>
+
+      </div>
+
+      <div class="card full">
+
+        <button type="submit">
+          Predict Attrition Risk
+        </button>
+
+      </div>
+
+    </div>
+
+  </form>
+
+  <div id="result" class="result"></div>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
